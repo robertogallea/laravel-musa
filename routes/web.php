@@ -206,6 +206,14 @@ Route::get('/users3/{user}', function (User $user) {
     // è possibile fare un redirect invece di fornire errore 404
 });
 
+
+
+
+Route::get('/posts/{post}', [\App\Http\Controllers\PostController::class, 'show'])->name('posts.show');
+Route::get('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show']);
+
+
+
 // FALLBACK ROUTE
 Route::fallback(function () {
     return 'Fallback route';
