@@ -4,5 +4,5 @@ Per caricare la versione finale di ciascuna giornata del corso, effettuare il ch
 segue:
 
 - Lezione 1 (30/04/2024): Nessun branch creato
-- Lezione 2 (02/05/2024): `git checkout 01.2024-05-02`
-- Lezione 3 (03/05/2024): `git checkout 01.2024-05-03`
+- Lezione 2 (02/05/2024): `git checkout 02.2024-05-02`
+- Lezione 3 (03/05/2024): `git checkout 03.2024-05-03`
