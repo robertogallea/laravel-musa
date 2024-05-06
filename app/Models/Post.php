@@ -11,6 +11,7 @@ class Post extends Model
     use HasFactory;
     use HasComments;
 
+
     protected $casts = [
         'status' => 'boolean',
     ];

@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->middleware(['throttle:admin'])
                 ->group(base_path('routes/admin.php'));
 
+            Route::prefix('/example')
+                ->name('example.')
+                ->group(base_path('/routes/example.php'));
+
             // posso inserire quanti gruppi desidero
             /*
             Route::prefix('/testers')
