@@ -28,6 +28,7 @@ return new class extends Migration
             // $table->foreignId('user_id')->constrained(table: 'my_users', indexName: 'posts_users_id');
 
             $table->boolean('status')->default(false);
+            $table->softDeletes();
 
             $table->timestamps();
             // equivale a scrivere

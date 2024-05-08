@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function() {
             Route::prefix('/admin')
                 ->name('admin.')
-                ->middleware(['throttle:admin'])
+                ->middleware(['throttle:admin', 'auth', 'web'])
                 ->group(base_path('routes/admin.php'));
 
             Route::prefix('/example')

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -31,6 +33,21 @@ class AppServiceProvider extends ServiceProvider
 
 
         ViewFacade::share('now', now());
+        // I dati sugli ultimi post e l'elenco delle categorie possono essere resi disponibili
+        // usando `share()`
+//        ViewFacade::share('latestPosts', Post::latest('id')->limit(4)->get());
+//        ViewFacade::share('categories', Category::all());
+        // oppure usando dei ViewComposer
+
+        ViewFacade::composer('layouts.aside', function (View $view) {
+            $latestPosts = Post::latest('id')->limit(4)->get();
+            $categories = Category::all();
+
+            $view
+                ->with('latestPosts', $latestPosts)
+                ->with('categories', $categories);
+        });
+
         // Tutte le viste avranno a disposizione una variabile $now contenente data/ora di sistema
 
 

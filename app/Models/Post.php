@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
     use HasFactory;
     use HasComments;
+    use SoftDeletes;
 
+    protected $guarded = null;
 
     protected $casts = [
         'status' => 'boolean',
@@ -47,7 +50,7 @@ class Post extends Model
     public function summary(): Attribute
     {
         return Attribute::make(
-          get: fn() => substr($this->body, 0, 40) . '...'
+          get: fn() => substr($this->body, 0, 400) . '...'
         );
     }
 

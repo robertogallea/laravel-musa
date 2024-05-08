@@ -7,7 +7,8 @@ use App\Models\User;
 
 Route::get('/', function () {
     return view('welcome');
-})->middleware(['highlight']);
+})->middleware(['highlight'])
+    ->name('index');
 
 
 Route::middleware('auth')->group(function () {
@@ -19,7 +20,9 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/posts/{post}', [\App\Http\Controllers\PostController::class, 'show'])->name('posts.show');
-Route::get('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show']);
+Route::get('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
+
+Route::view('/testview', 'layouts.master2');
 
 
 
