@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('category')->withTrashed()->get();
+        $posts = Post::with('category', 'user')->withTrashed()->get();
 
         return view('admin.posts.index', compact('posts'));
     }
@@ -35,21 +36,16 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         Post::create([
             'title' => $request->title,
             'body' => $request->body,
+            'slug' => $request->slug,
             'user_id' => $request->user()->id, // id utente loggato all'applicazione
             'category_id' => $request->category_id,
         ]);
 
-//        $post = new Post();
-//        $post->title = $request->title;
-//        $post->body = $request->body;
-//        $post->user_id = $request->user_id;
-//        $post->category_id = $request->category_id;
-//        $post->save();
 
         return redirect(route('admin.posts.index'));
     }
@@ -57,18 +53,16 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Post $post)
     {
-        $post = Post::find($id);
         return view('admin.posts.show', compact('post'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        $post = Post::find($id);
         $categories = Category::all();
 
         return view('admin.posts.edit', compact('post', 'categories'));
@@ -77,20 +71,15 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StorePostRequest $request, Post $post)
     {
-        $post = Post::find($id);
-
         $post->update([
             'title' => $request->title,
             'body' => $request->body,
+            'slug' => $request->slug,
             'category_id' => $request->category_id,
         ]);
-        /*
-        $post->title = $request->title;
-        $post->body = $request->body;
-        $post->save();
-        */
+
 
         return redirect(route('admin.posts.index'));
     }
@@ -98,14 +87,17 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
-        // Così servono due query
-//        $post = Post::find($id);
-//        $post->delete();
 
-        // in questo modo faccio una sola query
-        Post::where('id', $id)->delete();
+//        $post = Post::withTrashed()->where('slug', $post)->first();
+
+        if ($post->trashed()) {
+            $post->forceDelete();
+        } else {
+            $post->delete();
+        }
+
 
         return redirect(route('admin.posts.index'));
     }
@@ -116,4 +108,5 @@ class PostController extends Controller
 
         return redirect(route('admin.posts.index'));
     }
+
 }

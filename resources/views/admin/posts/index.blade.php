@@ -35,10 +35,10 @@
                     </form>
                 @endif
                 <form method="post" action="{{ route('admin.posts.destroy', $post) }}"
-                      onsubmit="return confirm('Sei sicuro di volere cancellare il post {{ $post->title }}?')">
+                      onsubmit="return confirm('Sei sicuro di volere cancellare @if($post->trashed()) definitivamente @endif il post {{ $post->title }}?')">
                     @method('delete')
                     @csrf
-                    <button type="submit">Cancella</button>
+                    <button type="submit">Cancella @if($post->trashed()) definitivamente @endif</button>
                 </form>
             </td>
         </tr>

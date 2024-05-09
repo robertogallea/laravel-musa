@@ -4,9 +4,12 @@ namespace App\Providers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Rules\Uppercase;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
@@ -26,8 +29,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+//        disabilita il lazy loading per evitare query N+1
+//        Model::preventLazyLoading(true);
+
         RateLimiter::for('admin', function(Request $request) {
-            return Limit::perMinute(10)
+            return Limit::perMinute(100)
                 ->by($request->user()?->id ?: $request->ip());
         });
 

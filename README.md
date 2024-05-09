@@ -14,4 +14,5 @@ segue:
 - Lezione 3 (03/05/2024): `git checkout 03.2024-05-03`
 - Lezione 4 (06/05/2024): `git checkout 04.2024-05-06`
 - Lezione 5 (08/05/2024): `git checkout 05.2024-05-08`
+- Lezione 6 (09/05/2024): `git checkout 06.2024-05-09` 
 

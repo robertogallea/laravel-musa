@@ -10,6 +10,7 @@ Route::get('/', function () {
 })->middleware(['highlight'])
     ->name('index');
 
+Route::redirect('/dashboard', '/admin/posts')->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

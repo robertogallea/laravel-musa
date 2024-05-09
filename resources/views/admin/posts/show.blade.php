@@ -8,6 +8,10 @@
         <td>{{ $post->title }}</td>
     </tr>
     <tr>
+        <td>Slug</td>
+        <td>{{ $post->slug }}</td>
+    </tr>
+    <tr>
         <td>Body</td>
         <td>{{ $post->body }}</td>
     </tr>

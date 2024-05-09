@@ -13,6 +13,14 @@ class Post extends Model
     use HasComments;
     use SoftDeletes;
 
+
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+
     protected $guarded = null;
 
     protected $casts = [
