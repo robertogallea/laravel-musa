@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\OrderByTitle;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
+#[ScopedBy([OrderByTitle::class])]
 class Post extends Model
 {
     use HasFactory;
@@ -14,14 +18,52 @@ class Post extends Model
     use SoftDeletes;
 
 
+    protected $guarded = null; // nessun attributo protetto
+//    protected $guarded = []; // nessun attributo protetto
+//    protected $guarded = ['title', 'body']; // solo title e body sono compilabili
+//
+//    protected $fillable = ['*']; // nessun attributo protetto (tutti compilabili)
+//
+//    protected $fillable = ['slug', 'status']; // tutti attributi protetti tranne slug e status
+
+
+
+    protected static function booted(): void
+    {
+//        static::addGlobalScope(new OrderByTitle());
+
+        // Scope globale anonimo
+//        static::addGlobalScope('orderByBody', function (Builder $builder) {
+//            $builder->orderBy('body');
+//        });
+    }
+
+    public function scopePublished(Builder $builder)
+    {
+        $builder->where('status', 1);
+    }
+
+    public function scopeUnpublished(Builder $builder)
+    {
+        $builder->where('status', 0);
+    }
+
+    public function scopeStatus(Builder $builder, bool $status)
+    {
+        $builder->where('status', $status);
+    }
+
+    public function scopeSortNormal(Builder $builder)
+    {
+        $builder->withoutGlobalScope(OrderByTitle::class);
+    }
+
 
     public function getRouteKeyName()
     {
         return 'slug';
     }
 
-
-    protected $guarded = null;
 
     protected $casts = [
         'status' => 'boolean',
@@ -73,5 +115,19 @@ class Post extends Model
         );
     }
 
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'likes');
+    }
+
+
 
 }
+
+//DB::table('likes')
+//    ->insert([
+//        ['user_id' => 1, 'post_id' => 1],
+//        ['user_id' => 2, 'post_id' => 1],
+//        ['user_id' => 2, 'post_id' => 2],
+//        ['user_id' => 3, 'post_id' => 2],
+//    ]);

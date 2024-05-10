@@ -24,7 +24,7 @@ class StorePostRequest extends FormRequest
      */
     public function rules(): array
     {
-        $post_id = $this->route()->parameter('post')->id;
+        $post_id = $this->route()->parameter('post')?->id;
 
         return [
             'title' => [

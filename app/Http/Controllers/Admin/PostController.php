@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -16,6 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
+        Log::info('Pagina /posts/index {user_id}', ['user_id' => \request()->user()->id]);
         $posts = Post::with('category', 'user')->withTrashed()->get();
 
         return view('admin.posts.index', compact('posts'));
@@ -46,6 +48,8 @@ class PostController extends Controller
             'category_id' => $request->category_id,
         ]);
 
+        $request->session()->flash('message', 'Post inserito con successo');
+        $request->session()->flash('status', 'success');
 
         return redirect(route('admin.posts.index'));
     }
