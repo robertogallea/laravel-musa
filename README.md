@@ -16,7 +16,7 @@ segue:
 - Lezione 4 (06/05/2024): `git checkout 04.2024-05-06`
 - Lezione 5 (08/05/2024): `git checkout 05.2024-05-08`
 - Lezione 6 (09/05/2024): `git checkout 06.2024-05-09`
-- Lezione 7 (09/05/2024): `git checkout 07.2024-05-10`
+- Lezione 7 (10/05/2024): `git checkout 07.2024-05-10`
 
 > **Nota**: per essere sicuri di avere sempre le dipendenze composer e gli asset aggiornati lanciare ad ogni checkout i
 > seguenti comandi:
