@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\PostCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
@@ -40,13 +42,16 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        Post::create([
+        $post = Post::create([
             'title' => $request->title,
             'body' => $request->body,
             'slug' => $request->slug,
             'user_id' => $request->user()->id, // id utente loggato all'applicazione
             'category_id' => $request->category_id,
         ]);
+
+        event(new PostCreated($post));
+//        Event::dispatch(new PostCreated($post)); // in alternativa a event()
 
         $request->session()->flash('message', 'Post inserito con successo');
         $request->session()->flash('status', 'success');

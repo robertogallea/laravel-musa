@@ -1,150 +1,104 @@
 <?php
 
+Route::get('/artisan', function() {
+   \Illuminate\Support\Facades\Artisan::call('blog:to-pdf');
+});
 
-use App\Models\Post;
+Route::get('/artisan-1', function() {
+    \Illuminate\Support\Facades\Artisan::call('blog:post-info', [
+        'post_id' => 1
+    ]);
+});
 
-Route::get('/no-chunk', function () {
-    $result = '';
 
+Route::get('/collection/each', function() {
+    $titles = '';
     $posts = \App\Models\Post::all();
 
-    foreach ($posts as $post) {
-        $result .= $post->title . '<br>';
-    }
-
-    return $result;
-});
-
-
-Route::get('/chunk', function () {
-    $result = '';
-
-    \App\Models\Post::chunk(100, function ($posts) use (&$result) {
-        foreach ($posts as $post) {
-            $result .= $post->title . '<br>';
-        }
+    $posts->each(function($post) use (&$titles) {
+        $titles .= $post->title . '<br>';
     });
 
-
-    return $result;
+    return $titles;
 });
 
-Route::get('lazy-chunk', function () {
-    $result = '';
+Route::get('/collection/map', function() {
+    $posts = \App\Models\Post::withCount('likes')->get();
 
-    $posts = \App\Models\Post::lazyById(100, 'id');
-
-    foreach ($posts as $post) {
-        $result .= $post->title . '<br>';
-    }
-
-    return $result;
+    $titlesAndLikes = $posts->map(
+        fn($post) => [
+            'title' => $post->title,
+            'likes' => $post->likes_count
+        ]
+    );
+    dd($titlesAndLikes);
 });
 
-Route::get('first-or-create', function () {
+Route::get('/collection/ex1', function() {
+    $posts = \App\Models\Post::withCount('likes')->get();
 
-    // firstOrCreate se il modello non esiste lo crea e lo salva sul db
-    // firstOrNew se il modello non esiste lo crea ma NON lo salva sul db
+    // calcolare il numero totale di like per i post
+    // il cui titolo è superiore ai 20 caratteri
 
-    $model = App\Models\Post::firstOrCreate(
-        [
-            'title' => 'post che non esiste'
-        ],
-        [
-            'slug' => 'aaa',
-            'status' => true,
-            'body' => 'aaa',
-            'user_id' => 1,
-            'category_id' => 1,
-        ]);
-
-    return $model;
-
-    // update
-
-
-    \App\Models\Post::find(1);
-
-    $post->title = '....';
-    $post->body = '...';
-    $post->save();
-
-    // oppure
-
-    $post->update([
-        'title' => '....',
-        'body' => '...',
-    ]);
-
-
-
-    // delete
-
-    // cancellazione a partire dal modello
-    $post = \App\Models\Post::first();
-    $post->delete();
-
-    // cancellazione a partire dalla query
-    \App\Models\Post::orderBy('id')->take(1)->delete();
-//    'DELETE FROM posts ORDER BY id ASC LIMIT 0,1'
-//    Post::destroy(1); // elimina un modello passando uno o più id
-//    Post::destroy(1, 2, 3); // elimina un modello passando uno o più id
-//    Post::destroy([1, 2, 3]); // elimina un modello passando uno o più id
+    $likesSum = $posts
+        ->filter(fn($post) => strlen($post->title) > 20)
+        ->sum('likes_count');
+    dd($likesSum);
 
 });
 
-Route::get('/session-get', function (\Illuminate\Http\Request $request) {
-//    return $request->session()->get('test');
-//    return $request->session()->get('test', 'default value');
-//    return $request->session()->get('test', fn() => rand(10,100));
-//    return session()->get('test', 'valore default');
-    return session('test', 'valore default');
-})->middleware(\Illuminate\Session\Middleware\StartSession::class);
+Route::get('/collection/ex2', function() {
+    $posts = \App\Models\Post::withCount('likes')->get();
+    dump($posts);
 
-Route::get('/session-push', function (\Illuminate\Http\Request $request) {
-//   $request->session()->push('post.temp_title', 'Hello');
+    // raggruppamento sullo stato di ciascun elemento della collection
+    $postsGroups = $posts->groupBy('status');
+    dump($postsGroups);
 
-   return $request->session()->get('post');
-})->middleware(\Illuminate\Session\Middleware\StartSession::class);
-
-Route::get('/session-increment', function (\Illuminate\Http\Request $request) {
-    $request->session()->increment('page-views');
-
-    return $request->session()->get('page-views');
-})->middleware(\Illuminate\Session\Middleware\StartSession::class);
-
-
-Route::get('/cache', function() {
-    $result = \Cache::remember('post_titles', 60*60*24*7, function () {
-        dump('Cache ricalcolata');
-        $result = '';
-        $posts = Post::all();
-
-        foreach ($posts as $post) {
-            $result .= $post->title . '</br>';
-        }
-
-        return $result;
+    // raggruppamento in base alla lunghezza del titolo di ciascun elemento della collection (post)
+    $postsGroups2 = $posts->groupBy(function($post) {
+       // raggruppare per numero di caratteri del titolo
+        return strlen($post->title);
     });
 
-    // senza scadenza
-//    $result = \Cache::rememberForever('post_titles', function () {
-//        dump('Cache ricalcolata');
-//        $result = '';
-//        $posts = Post::all();
-//
-//        foreach ($posts as $post) {
-//            $result .= $post->title . '</br>';
-//        }
-//
-//        return $result;
-//    });
-//
-//    // scades solo se esplicitamente chiavo
-//    \Cache::forget('post_titles');
-//
-//
-//
-//
-//    return $result;
+    dump($postsGroups2);
+
+    // raggruppamento di secondo livello, sulla divisibilità per 2 della lunghezza dei titoli
+    $postsGroupsOddEven = $postsGroups2->groupBy(fn($item, $key) => $key % 2);
+    dd($postsGroupsOddEven);
+});
+
+
+Route::get('/collection/ex3', function() {
+    // prendo tutti i post finchè non ne incontro uno che abbia almeno un like
+    $posts = \App\Models\Post::withCount('likes')->get();
+
+    $posts = $posts->takeUntil(fn($post) => $post->likes_count > 0);
+
+    dd($posts);
+});
+
+Route::get('/collection/macro', function() {
+    $posts = \App\Models\Post::all();
+
+    dd($posts->groupByTitleDivisibleBy(5));
+});
+
+
+
+// Higher order messages
+Route::get('/collection/high-order-messages', function() {
+    // Estrazione dei titoli dei post
+    $posts = \App\Models\Post::with('category')->withCount('likes')->get();
+
+//    $titlesAndLikes = $posts->map(fn($post) => $post->title);
+    $titlesAndLikes = $posts->map->title;
+    dump($titlesAndLikes);
+
+    $titlesByStatus = $posts->groupBy->status;
+    dump($titlesByStatus);
+
+    $titlesSortedByCreatedAt = $posts->sortBy->created_at->map->title;
+    dump($titlesSortedByCreatedAt);
+
 });

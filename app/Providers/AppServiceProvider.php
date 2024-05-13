@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use App\Listeners\PostSubscriber;
 use App\Models\Category;
 use App\Models\Post;
 use App\Rules\Uppercase;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View as ViewFacade;
@@ -32,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 //        disabilita il lazy loading per evitare query N+1
 //        Model::preventLazyLoading(true);
 
-        RateLimiter::for('admin', function(Request $request) {
+        RateLimiter::for('admin', function (Request $request) {
             return Limit::perMinute(100)
                 ->by($request->user()?->id ?: $request->ip());
         });
@@ -72,5 +75,14 @@ class AppServiceProvider extends ServiceProvider
             dump('composer eseguito ' . $view->getName());
         });
         */
+
+        Collection::macro('groupByTitleDivisibleBy', function ($n) {
+            return $this->groupBy(function ($item) {
+                return strlen($item->title);
+            })->groupBy(fn($item, $key) => $key % $n);
+        });
+
+
+        Event::subscribe(PostSubscriber::class);
     }
 }

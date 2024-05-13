@@ -17,6 +17,13 @@ class Post extends Model
     use HasComments;
     use SoftDeletes;
 
+    protected $dispatchesEvents = [
+//        'saved' => PostSaved::class,        // dopo che il modello viene salvato
+//        'deleted' => PostDeleted::class,    // dopo che il modello viene cancellato
+//        'updated' => PostUpdated::class,  // dopo che il modello viene aggiornato
+//        'deleting' => PostDeleting::class,// PRIMA che il modello viene cancellato
+    // elenco completo eventi: https://laravel.com/docs/11.x/eloquent#events
+    ];
 
     protected $guarded = null; // nessun attributo protetto
 //    protected $guarded = []; // nessun attributo protetto
