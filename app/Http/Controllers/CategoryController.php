@@ -10,9 +10,11 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         // eager loading
-        $category->load(['posts', 'posts.user']);
+//        $category->load(['posts', 'posts.user']);
         // in contrasto al lazy loading
 
+        $posts = $category->posts()->with('user')->paginate(10);
+        $category->setRelation('posts', $posts);
 
         return view('category.show')
             ->with('category', $category);

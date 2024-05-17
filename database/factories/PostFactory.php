@@ -23,8 +23,8 @@ class PostFactory extends Factory
             'title' => $title = $this->faker->text(32),
             'slug' => Str::of($title)->slug()->toString(),
             'body' => $this->faker->realText(2000),
-            'user_id' => null,
-            'category_id' => Category::first()->id,
+            'user_id' => User::factory(),
+            'category_id' => Category::factory(),
             'status' => rand(0,1),
         ];
     }

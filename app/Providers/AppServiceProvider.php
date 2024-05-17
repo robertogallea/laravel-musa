@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Listeners\PostSubscriber;
 use App\Models\Category;
 use App\Models\Post;
+use App\Observers\PostObserver;
 use App\Rules\Uppercase;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
@@ -84,5 +86,13 @@ class AppServiceProvider extends ServiceProvider
 
 
         Event::subscribe(PostSubscriber::class);
+
+        Post::observe(PostObserver::class);
+
+        Paginator::useBootstrapThree();
+
+        RateLimiter::for('job-limit', function ($job) {
+            return Limit::perMinute(3);
+        });
     }
 }
