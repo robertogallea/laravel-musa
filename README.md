@@ -100,6 +100,3 @@ segue:
 - Model events
 - Pagination
 - Queues
-- HTTP client
-- Gestione errori
-- Mail
