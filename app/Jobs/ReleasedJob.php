@@ -2,16 +2,15 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class LowJob implements ShouldQueue
+class ReleasedJob implements ShouldQueue
 {
-    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -26,6 +25,8 @@ class LowJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $this->release(5); // numero di secondi dopo cui ritentare il job (se vi sono tentativi restanti)
+//        $this->release(now()->addHours(3));
 
     }
 }

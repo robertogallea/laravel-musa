@@ -34,5 +34,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->report(function (DivisionByZeroError $exception) {
+            \App\Jobs\HandleDivisionByZero::dispatch();
+
+            return false; // per disabilitare la riga di log di default
+        })->stop(); // per disabilitare la riga di log di default (alternativa)
     })->create();

@@ -19,6 +19,7 @@ segue:
 - [Lezione 7](#lezione-7-10052024) (10/05/2024): `git checkout 07.2024-05-10`
 - [Lezione 8](#lezione-8-13052024) (13/05/2024): `git checkout 08.2024-05-13`
 - [Lezione 9](#lezione-9-16052024) (16/05/2024): `git checkout 09.2024-05-16`
+- [Lezione 10](#lezione-10-20052024) (20/05/2024): `git checkout 10.2024-05-20`
 
 > **Nota**: per essere sicuri di avere sempre le dipendenze composer e gli asset aggiornati lanciare ad ogni checkout i
 > seguenti comandi:
@@ -100,3 +101,10 @@ segue:
 - Model events
 - Pagination
 - Queues
+
+## Lezione 10 (20/05/2024)
+
+- Queues (cont.d)
+- Client HTTP
+- Mail
+- Gestione errori
