@@ -118,4 +118,5 @@ segue:
   - Gestione token Sanctuum
 - API Resources
 - Security
-- Localization
+  - Encryption
+  - Signed routes
