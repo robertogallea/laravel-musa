@@ -142,6 +142,15 @@ class Post extends Model
         return $this->belongsToMany(User::class, 'likes');
     }
 
+//    public function toArray()
+//    {
+//        return [
+//            'slug' => $this->slug,
+//            'title' => $this->title,
+//            'summary' => $this->summary,
+//            'likes' => $this->likes,
+//        ];
+//    }
 
 
 }

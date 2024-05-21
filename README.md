@@ -20,6 +20,7 @@ segue:
 - [Lezione 8](#lezione-8-13052024) (13/05/2024): `git checkout 08.2024-05-13`
 - [Lezione 9](#lezione-9-16052024) (16/05/2024): `git checkout 09.2024-05-16`
 - [Lezione 10](#lezione-10-20052024) (20/05/2024): `git checkout 10.2024-05-20`
+- [Lezione 11](#lezione-11-21052024) (21/05/2024): `git checkout 11.2024-05-21`
 
 > **Nota**: per essere sicuri di avere sempre le dipendenze composer e gli asset aggiornati lanciare ad ogni checkout i
 > seguenti comandi:
@@ -108,3 +109,13 @@ segue:
 - Client HTTP
 - Mail
 - Gestione errori
+
+## Lezione 11 (21/05/2024)
+
+- Gestione errori (cont.d)
+- API
+  - Sanctum vs Passport
+  - Gestione token Sanctuum
+- API Resources
+- Security
+- Localization

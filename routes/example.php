@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Post;
+use App\Models\User;
 
 Route::get('/job', function () {
     \App\Jobs\TestJob::dispatch(10);
@@ -285,3 +286,26 @@ Route::get('/mail-markdown', function () {
 Route::get('/error', function() {
    1/0;
 });
+
+
+Route::get('/encrypt', function() {
+   $data = 'Hello world';
+   $encrypted = encrypt($data);
+   dump($encrypted);
+   dump(base64_decode($encrypted));
+   $decrypted = decrypt($encrypted);
+   dump($decrypted);
+
+   // Se voglio utilizzare una chiave e/o un algoritmo di codifica
+    // diverso da quello predefinito per l'applicazione
+//   $enc = new \Illuminate\Encryption\Encrypter('XXX', 'XXX');
+//   $ciphered = $enc->encrypt($data);
+//    $enc->decrypt($ciphered);
+});
+
+
+Route::get('/signed/{user}', function($user) {
+    $user = User::find($user);
+    \Illuminate\Support\Facades\Auth::login($user);
+   return $user->name;
+})->name('signed-route')->middleware('signed');

@@ -28,8 +28,8 @@ Route::view('/testview', 'layouts.master2');
 
 
 // FALLBACK ROUTE
-Route::fallback(function () {
-    return 'Fallback route';
-});
+//Route::fallback(function () {
+//    return 'Fallback route';
+//});
 
 require __DIR__.'/auth.php';
