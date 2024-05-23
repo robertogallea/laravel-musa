@@ -1,0 +1,20 @@
+
+   LogicException 
+
+  A scheduled event name is required to only run on one server. Use the 'name' method before 'onOneServer'.
+
+  at vendor\laravel\framework\src\Illuminate\Console\Scheduling\CallbackEvent.php:160
+    156▕      */
+    157▕     public function onOneServer()
+    158▕     {
+    159▕         if (! isset($this->description)) {
+  ➜ 160▕             throw new LogicException(
+    161▕                 "A scheduled event name is required to only run on one server. Use the 'name' method before 'onOneServer'."
+    162▕             );
+    163▕         }
+    164▕
+
+  1   routes\console.php:53
+      Illuminate\Console\Scheduling\CallbackEvent::onOneServer()
+  2   vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php:499
+

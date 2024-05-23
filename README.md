@@ -120,3 +120,10 @@ segue:
 - Security
   - Encryption
   - Signed routes
+
+## Lezione 12 (23/05/2024)
+
+- Localization
+- Email verification
+- Authorization
+- Scheduler

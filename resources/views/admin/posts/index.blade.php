@@ -33,22 +33,38 @@
             <td>{{ $post->created_at->format('d/m/Y - H:i') }}</td>
             <td>{{ $post->updated_at->format('d/m/Y - H:i') }}</td>
             <td>
-                <a href="{{ route('admin.posts.show', $post) }}">Visualizza</a>
-                <a href="{{ route('admin.posts.edit', $post) }}">Modifica</a>
-                @if ($post->trashed())
-                    <form method="post" action="{{ route('admin.posts.restore', $post) }}"
-                          onsubmit="return confirm('Sei sicuro di volere recuperare il post {{ $post->title }}?')">
-                        @method('put')
+                @can('view', $post)
+                    <a href="{{ route('admin.posts.show', $post) }}">Visualizza</a>
+                @endcan
+                @can('update', $post)
+                    <a href="{{ route('admin.posts.edit', $post) }}">Modifica</a>
+                @endcan
+                @can('restore', $post)
+                    @if ($post->trashed())
+                        <form method="post" action="{{ route('admin.posts.restore', $post) }}"
+                              onsubmit="return confirm('Sei sicuro di volere recuperare il post {{ $post->title }}?')">
+                            @method('put')
+                            @csrf
+                            <button type="submit">Recupera</button>
+                        </form>
+                    @endif
+                @endcan
+{{--                    Se il post non è cancellato e l'utente può cancellarlo --}}
+{{--                    O--}}
+{{--                    Se il post è cancellato in modalità soft e l'utente può forzarne la cancellazione--}}
+                @if (
+                    (! $post->trashed() && \Illuminate\Support\Facades\Auth::user()->can('delete', $post)) ||
+                    ($post->trashed() && \Illuminate\Support\Facades\Auth::user()->can('forceDelete', $post))
+                )
+                    <form method="post" action="{{ route('admin.posts.destroy', $post) }}"
+                          onsubmit="return confirm('Sei sicuro di volere cancellare @if($post->trashed()) definitivamente @endif il post {{ $post->title }}?')">
+                        @method('delete')
                         @csrf
-                        <button type="submit">Recupera</button>
+                        <button type="submit">Cancella @if($post->trashed())
+                                definitivamente
+                            @endif</button>
                     </form>
                 @endif
-                <form method="post" action="{{ route('admin.posts.destroy', $post) }}"
-                      onsubmit="return confirm('Sei sicuro di volere cancellare @if($post->trashed()) definitivamente @endif il post {{ $post->title }}?')">
-                    @method('delete')
-                    @csrf
-                    <button type="submit">Cancella @if($post->trashed()) definitivamente @endif</button>
-                </form>
             </td>
         </tr>
     @empty

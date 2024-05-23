@@ -8,12 +8,16 @@ use App\Http\Requests\StorePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
+use App\Policies\PostPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
@@ -28,8 +32,11 @@ class PostController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+//        if ($request->user()->cannot('create', Post::class)) {
+//            abort(404);
+//        }
         $post = new Post();
         $categories = Category::all();
         $users = User::all();
@@ -101,19 +108,34 @@ class PostController extends Controller
 
 //        $post = Post::withTrashed()->where('slug', $post)->first();
 
+        // allows e denies restituiscono solo vero o falso in base alla autorizzazione ad eseguire l'azione
+//        if (Gate::denies('delete-post', $post)) {
+//            abort(403);
+//        }
+//            inspect restituisce un oggetto di tipo response che contiene anche informazioni aggiuntive
+//        $response = Gate::inspect('delete-post', $post);
+//
+//        if ($response->denied()) {
+//            abort(401, $response->message());
+//        }
+
+
+
         if ($post->trashed()) {
+            Gate::authorize('forceDelete', $post);
             $post->forceDelete();
         } else {
+            Gate::authorize('delete', $post);
             $post->delete();
         }
 
-
         return redirect(route('admin.posts.index'));
+
     }
 
     public function restore(string $post)
     {
-        Post::onlyTrashed()->find($post)->restore();
+        Post::onlyTrashed()->where('slug', $post)->first()->restore();
 
         return redirect(route('admin.posts.index'));
     }

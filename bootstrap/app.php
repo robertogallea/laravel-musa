@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,11 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::prefix('/admin')
                 ->name('admin.')
                 ->middleware(['throttle:admin', 'auth', 'web'])
-                ->group(base_path('routes/admin.php'));
+                ->group(base_path('routes/admin.php'))
+            ;
 
             Route::prefix('/example')
                 ->name('example.')
-                ->group(base_path('/routes/example.php'));
+                ->middleware(['web', 'set_locale'])
+                ->group(base_path('/routes/example.php'))
+            ;
 
             // posso inserire quanti gruppi desidero
             /*
@@ -29,14 +33,14 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //$middleware->append(\App\Http\Middleware\TestMiddleware::class);
         $middleware->alias([
             'magic' => \App\Http\Middleware\TestMiddleware::class,
             'highlight' => \App\Http\Middleware\HighlightText::class,
 
             // middleware di sanctum
             'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
-            'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class
+            'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+            'set_locale' => \App\Http\Middleware\SetLocale::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
@@ -79,5 +83,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 return \Illuminate\Support\Lottery::odds(1, 100);
             }
         });
-
+    })->withSchedule(function (Schedule $schedule) {
+//        $schedule->call(new \App\Console\Commands\ConvertPostsToPDF())->daily()->at("12:53");
     })->create();
