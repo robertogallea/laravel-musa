@@ -24,7 +24,7 @@ class PostController extends Controller
     public function index()
     {
         Log::info('Pagina /posts/index {user_id}', ['user_id' => \request()->user()->id]);
-        $posts = Post::with('category', 'user')->withTrashed()->get();
+        $posts = Post::with('category', 'user')->withTrashed()->paginate(20);
 
         return view('admin.posts.index', compact('posts'));
     }

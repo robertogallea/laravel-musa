@@ -127,3 +127,10 @@ segue:
 - Email verification
 - Authorization
 - Scheduler
+
+## Lezione 13 (24/05/2024)
+
+- Storage
+- Notifications
+- Broadcasting / Reverb
+- View Components

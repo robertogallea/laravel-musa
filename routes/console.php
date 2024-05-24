@@ -50,7 +50,7 @@ Artisan::command('other-test', function() {
     // fai qualcosa se l'operazione completa correttamente
 })->onFailure(function() {
     // fai qualcosa se l'operazione fallisce
-})->onOneServer();
+});
 
 \Illuminate\Support\Facades\Schedule::command('blog:categories')
     ->everyTenSeconds()

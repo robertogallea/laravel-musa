@@ -19,6 +19,9 @@
                         <li class="cl-effect-11"><a href="full-width.html" data-hover="Blog">Blog</a></li>
                         <li class="cl-effect-11"><a href="about.html" data-hover="About">About</a></li>
                         <li class="cl-effect-11"><a href="contact.html" data-hover="Contact">Contact</a></li>
+                        @if (\Illuminate\Support\Facades\Auth::user())
+                            <li class="cl-effect-11"><a href="{{ route('notifications.index') }}" data-hover="Contact">Notifications ({{ \Illuminate\Support\Facades\Auth::user()->unreadNotifications->count() }})</a></li>
+                        @endif
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </nav>

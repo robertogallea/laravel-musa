@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
@@ -94,5 +96,8 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('job-limit', function ($job) {
             return Limit::perMinute(3);
         });
+
+//        Registrazione manuale di un componente blade
+//        Blade::component('component-name', MyComponent::class);
     }
 }

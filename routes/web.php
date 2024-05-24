@@ -23,6 +23,10 @@ Route::get('/posts', [\App\Http\Controllers\PostController::class, 'index'])->na
 Route::get('/posts/{post}', [\App\Http\Controllers\PostController::class, 'show'])->name('posts.show');
 Route::get('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
 
+Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index')->middleware(['auth']);
+Route::get('/notifications/{notification}', [\App\Http\Controllers\NotificationController::class, 'show'])->name('notifications.show')->middleware(['auth']);
+
+
 Route::view('/testview', 'layouts.master2');
 
 
