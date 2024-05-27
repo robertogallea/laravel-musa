@@ -1,40 +1,32 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
+use App\Services\BookImporterService;
+use App\Services\BookPublisher;
+use App\Services\BookService;
+use App\Services\DBExportService;
+use App\Services\ExportingServiceInterface;
+use App\Services\RandomService;
 
-Route::get('/download', function () {
-    return Storage::download(
-        'test.json',
-        'downloaded.json',
-        [
-            'Content-Disposition' => 'inline' // Mostra il contenuto del file direttamente nel browser
-        ]
-    );
+// zero configuration
+Route::get('/container', function(BookService $service) {
+    $service->load();
 });
 
-
-Route::view('/upload-form', 'upload-form');
-
-Route::post('/upload', function (\Illuminate\Http\Request $request) {
-
-//    $originalName = $request->file('uploadedFile')->getClientOriginalName(); // Per ottenere il nome originale del file
-
-    $filename = $request->file('uploadedFile')->store('images'); // salva il file con nome casuale
-
-//   $filename = $request->file('uploadedFile')->storeAs('images','my-image.jpg'); // specifico il nome da assegnare al file
-    return $filename;
-
-    // Esempio di memorizzazione di file originale e file dell'applicazione per successivo download con il nome originale
-    // Supponendo di avere una classe Picture
-//    Picture::create([
-//        'original_name' => $originalName,
-//        'filename' => $filename,
-//    ]);
-//
-//    $picture = Picture::find(1);
-//    Storage::download($picture->filename, $picture->original_name);
+Route::get('/container-recursive', function(BookPublisher $service) {
+    dd($service);
 });
 
+Route::get('/singleton', function() {
+    $service = app()->get(RandomService::class);
+    dump($service->get());
+    $service2 = app()->get(RandomService::class);
+    dump($service2->get());
+});
 
+Route::get('/dip', function(ExportingServiceInterface $service) {
+    dd($service->export());
+});
 
-Route::view('/components', 'component-example', ['numberOfIterations' => 10, 'componentName' => 'TestComponent']);
+Route::get('/binding-primitives', function (BookImporterService $service) {
+    dd($service);
+});

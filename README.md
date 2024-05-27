@@ -21,6 +21,9 @@ segue:
 - [Lezione 9](#lezione-9-16052024) (16/05/2024): `git checkout 09.2024-05-16`
 - [Lezione 10](#lezione-10-20052024) (20/05/2024): `git checkout 10.2024-05-20`
 - [Lezione 11](#lezione-11-21052024) (21/05/2024): `git checkout 11.2024-05-21`
+- [Lezione 12](#lezione-12-23052024) (23/05/2024): `git checkout 12.2024-05-23`
+- [Lezione 13](#lezione-13-24052024) (24/05/2024): `git checkout 13.2024-05-24`
+- [Lezione 13](#lezione-14-27052024) (27/05/2024): `git checkout 13.2024-05-27`
 
 > **Nota**: per essere sicuri di avere sempre le dipendenze composer e gli asset aggiornati lanciare ad ogni checkout i
 > seguenti comandi:
@@ -134,3 +137,8 @@ segue:
 - Notifications
 - Broadcasting / Reverb
 - View Components
+
+## Lezione 14 (27/05/2024)
+
+- Service Container
+- Tests e TDD

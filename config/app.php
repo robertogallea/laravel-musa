@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    'export-service' => \App\Services\DBExportService::class,
     /*
     |--------------------------------------------------------------------------
     | Application Name
