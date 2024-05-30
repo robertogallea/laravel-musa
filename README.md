@@ -24,6 +24,7 @@ segue:
 - [Lezione 12](#lezione-12-23052024) (23/05/2024): `git checkout 12.2024-05-23`
 - [Lezione 13](#lezione-13-24052024) (24/05/2024): `git checkout 13.2024-05-24`
 - [Lezione 14](#lezione-14-27052024) (27/05/2024): `git checkout 14.2024-05-27`
+- [Lezione 15](#lezione-15-30052024) (30/05/2024): `git checkout 15.2024-05-30`
 
 > **Nota**: per essere sicuri di avere sempre le dipendenze composer e gli asset aggiornati lanciare ad ogni checkout i
 > seguenti comandi:
@@ -142,3 +143,9 @@ segue:
 
 - Service Container
 - Tests e TDD - Repo applicazione disponibile su https://github.com/robertogallea/laravel-musa-tdd
+
+
+## Lezione 15 (30/05/2024)
+
+- Asset bundling
+- Package development

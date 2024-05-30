@@ -5,4 +5,5 @@ return [
     App\Providers\AuthServiceProvider::class,
     App\Providers\BindingServiceProvider::class,
     App\Providers\GithubServiceProvider::class,
+    App\Providers\ViteServiceProvider::class,
 ];

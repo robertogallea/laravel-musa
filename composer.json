@@ -11,7 +11,8 @@
         "laravel/reverb": "@beta",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "opcodesio/log-viewer": "^3.8"
+        "opcodesio/log-viewer": "^3.8",
+        "musaformazione/taskmanager": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
@@ -68,6 +69,12 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/taskmanagement"
+        }
+    ]
 }
